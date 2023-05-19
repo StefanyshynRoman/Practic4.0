@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+
+    <appender name="PRINT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%(%msg) %n</pattern>
+        </encoder>
+    </appender>
+    <appender name="PRINT1"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%(%msg) %n</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss} [%thread] %highlight(%-5level) %(%logger{20}) %green(%msg) %n</pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="log1" level="INFO" additivity="false">
+        <appender-ref ref="PRINT"/>
+    </logger>
+    <logger name="log2" level="INFO" additivity="false">
+        <appender-ref ref="PRINT1"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

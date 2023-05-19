@@ -1,0 +1,32 @@
+package com.shpp.rstefanyshyn;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class BDConnection implements Constant {
+    private final Logger logger = LoggerFactory.getLogger(BDConnection.class);
+    private Connection connection;
+
+    public void connect() throws SQLException {
+        connection = DriverManager.getConnection(
+                URL_SQL,USER,PASSWORD    );
+        connection.createStatement();
+        logger.info("Connected to the database.");
+    }
+
+    public void disconnect() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+            logger.info("Disconnected from the database.");
+
+        }
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+}
