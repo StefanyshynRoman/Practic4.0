@@ -7,20 +7,19 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
 import java.sql.Statement;
 
 public class ExecuteSqlFile implements Constant{
     private final Logger logger = LoggerFactory.getLogger(ExecuteSqlFile.class);
 
     Connection connection;
-    public ExecuteSqlFile(  Connection connection) throws SQLException {
+    public ExecuteSqlFile(  Connection connection)  {
         this.connection=connection;
 
     }
     public void readDLL() {
-        try (//Connection connection = DriverManager.getConnection(SQL, USER, PASSWORD);
+        try (
              Statement statement = connection.createStatement();
              InputStream inputStream = ExecuteSqlFile.class.getClassLoader().getResourceAsStream(DDL_SQL)) {
             assert inputStream != null;
@@ -39,11 +38,13 @@ public class ExecuteSqlFile implements Constant{
                         sqlStatements.setLength(0);
                     }
                 }
+
     logger.info("File Dll is completed {} ",DDL_SQL);
 
             }
         } catch (Exception e) {
             logger.error("File Dll is not completed {} ",DDL_SQL+ e);
+            e.printStackTrace();
         }
     }
 }

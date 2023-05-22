@@ -14,14 +14,14 @@ public class ProductFind implements Constant{
     private final Logger logger = LoggerFactory.getLogger(ProductFind.class);
     Connection connection;
 
-    public ProductFind(Connection connection) throws SQLException {
+    public ProductFind(Connection connection)  {
         this.connection = connection;
 
     }
     public void find() {
         StopWatch stopWatch=new StopWatch();
         stopWatch.restart();
-        try {
+
            String productType = System.getProperty("type","test").toLowerCase();
             String sql =  "SELECT s.address " +
                     "FROM store s " +
@@ -37,7 +37,7 @@ public class ProductFind implements Constant{
                 statement.setString(1, productType);
                 ResultSet resultSet = statement.executeQuery();
 
-                // Обробка результатів запиту
+
                 if (resultSet.next()) {
                     String storeAddress = resultSet.getString("address");
                     logger.warn("Store's address  with " + productType + ": " + storeAddress);
@@ -49,9 +49,8 @@ public class ProductFind implements Constant{
             } catch (SQLException e) {
                 e.printStackTrace();
             }  stopWatch.stop();
-            logger.info("Find  products type , seconds - {} ",  stopWatch.taken() / THOUSAND);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+
+
     }
 }

@@ -11,19 +11,21 @@ public class BDConnection implements Constant {
     private final Logger logger = LoggerFactory.getLogger(BDConnection.class);
     private Connection connection;
 
-    public void connect() throws SQLException {
+    public boolean connect() throws SQLException {
         connection = DriverManager.getConnection(
                 URL_SQL,USER,PASSWORD    );
         connection.createStatement();
         logger.info("Connected to the database.");
+        return true;
     }
 
-    public void disconnect() throws SQLException {
+    public boolean disconnect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
             logger.info("Disconnected from the database.");
 
         }
+        return false;
     }
 
     public Connection getConnection() {

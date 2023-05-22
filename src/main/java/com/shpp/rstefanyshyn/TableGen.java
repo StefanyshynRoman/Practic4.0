@@ -12,7 +12,7 @@ public class TableGen implements Constant{
     private final Logger logger = LoggerFactory.getLogger(TableGen.class);
     Connection connection;
 
-public TableGen(  Connection connection) throws SQLException {
+public TableGen(  Connection connection)  {
     this.connection=connection;
 
 }
@@ -32,8 +32,5 @@ public void reader(String insertQuery, String file ) throws IOException, SQLExce
     reader.close();
 
 }
-public void closeConnection() throws SQLException {
-    connection.close();
 
-}
 }

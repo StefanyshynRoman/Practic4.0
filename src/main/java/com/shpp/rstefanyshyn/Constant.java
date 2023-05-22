@@ -6,9 +6,10 @@ public interface Constant {
     GetProperty PROPERTY_CONNECTION = new GetProperty("connection.properties");
 
     String NUMBER_PRODUCTS = PROPERTY.getValueFromProperty("maximum");
-    String FILE_STORE="adress_stores1.csv";
-    String FILE_TYPE= "product_type.csv";
     String DDL_SQL="ddl.sql";
+    String FILE_STORE=PROPERTY.getValueFromProperty("file_store");;
+    String FILE_TYPE= PROPERTY.getValueFromProperty("file_type");
+
     String URL_SQL =PROPERTY_CONNECTION.getValueFromProperty("sql");
     String USER=PROPERTY_CONNECTION.getValueFromProperty("username.db");
     String PASSWORD=PROPERTY_CONNECTION.getValueFromProperty("password.db");
