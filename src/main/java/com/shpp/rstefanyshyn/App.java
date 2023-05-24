@@ -63,10 +63,13 @@ RPS - 7447.0144918902015, Bach size - 1000
         logger.warn("store_address: {} , valid_products: {}, type_products: {}",
                 tableFinish.getRowCountFromStore(), tableFinish.getRowCountFromProduct(), productGenerator.getRowCountFromType());
 
-        stopWatch.restart();
+       // stopWatch.restart();
         tableFinish.generateFinishTable();
-        stopWatch.stop();
-        logger.info("Finish table create {} ", (stopWatch.taken()) / THOUSAND);
+     //   stopWatch.stop();
+//        logger.info("Finish table create {} ", (stopWatch.taken()) / THOUSAND);
+//        logger.info("Row in ... table {} ",tableFinish.getRowCountFromInventory());
+        //logger.warn("Create table inventory for second {} , Row in ... table {}: {},  RPS:{}", stopWatch.taken()/ THOUSAND,rowInventory, 1000.0 * rowInventory / stopWatch.taken());
+
     }
 
 
