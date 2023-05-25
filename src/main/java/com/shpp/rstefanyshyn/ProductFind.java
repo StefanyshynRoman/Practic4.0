@@ -25,13 +25,22 @@ public class ProductFind implements Constant{
            String productType = System.getProperty("type","test").toLowerCase();
             String sql =  "SELECT s.address " +
                     "FROM store s " +
-                    "JOIN finish f ON s.id = f.store_id " +
+                    "JOIN inventory f ON s.id = f.store_id " +
                     "JOIN products p ON f.product_id = p.id " +
                     "JOIN type t ON p.type_id = t.id " +
                     "WHERE t.type = ? " +
                     "GROUP BY s.id " +
                     "ORDER BY SUM(f.qty) DESC " +
                     "LIMIT 1";
+//        SELECT s.address
+//        FROM store s
+//        INNER JOIN inventory f ON s.id = f.store_id
+//        INNER JOIN products p ON f.product_id = p.id
+//        INNER JOIN type t ON p.type_id = t.id
+//        WHERE t.type = ?
+//        GROUP BY s.address
+//        ORDER BY SUM(f.qty) DESC
+//        LIMIT 1;
 
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, productType);

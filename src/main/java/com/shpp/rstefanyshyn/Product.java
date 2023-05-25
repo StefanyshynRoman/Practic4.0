@@ -9,6 +9,15 @@ public class Product {
     String productName;
 
     int productTypeId;
+    private boolean valid = true;
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
 
     public Product(int typeId, String name) {
         this.productName = name;

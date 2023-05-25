@@ -29,7 +29,7 @@ PreparedStatement mockPreparedStatement=mock(PreparedStatement.class);
     Connection mockConnection = mock(Connection.class);
     Statement mockStatement = mock(Statement.class);
     ResultSet mockResultSet = mock(ResultSet.class);
-    TableFinish tableFinish = new TableFinish(mockConnection);
+    TableInventory tableInventory = new TableInventory(mockConnection);
    // private TableFinish tableFinish;
 
     @BeforeEach
@@ -40,14 +40,14 @@ PreparedStatement mockPreparedStatement=mock(PreparedStatement.class);
 //        ResultSet mockResultSet = mock(ResultSet.class);
 
         // Create an instance of TableFinish with the mock connection
-        TableFinish tableFinish = new TableFinish(mockConnection);
+        TableInventory tableInventory = new TableInventory(mockConnection);
         // Налаштування поведінки мок-об'єктів
 //        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
 //        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
 //        when(mockResultSet.next()).thenReturn(true, false);
 //        when(mockResultSet.getInt(anyString())).thenReturn(1, 2, 3); // Повернення довільних значень
 
-        tableFinish = new TableFinish(mockConnection);
+        tableInventory = new TableInventory(mockConnection);
     }
 
 
@@ -62,7 +62,7 @@ PreparedStatement mockPreparedStatement=mock(PreparedStatement.class);
         when(mockResultSet.getInt("row_count")).thenReturn(5);
 
         // Виклик методу, який потрібно протестувати
-        int rowCount = tableFinish.getRowCountFromProduct();
+        int rowCount = tableInventory.getRowCountFromProduct();
 
         // Перевірка викликів методів
         verify(mockConnection, times(1)).createStatement();
@@ -82,7 +82,7 @@ PreparedStatement mockPreparedStatement=mock(PreparedStatement.class);
         when(mockResultSet.getInt("row_count")).thenReturn(3);
 
 
-        int rowCount = tableFinish.getRowCountFromStore();
+        int rowCount = tableInventory.getRowCountFromStore();
 
 
         verify(mockConnection, times(1)).createStatement();

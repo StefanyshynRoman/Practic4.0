@@ -31,14 +31,7 @@ public class ProductGenerator1 implements Constant {
         this.connection = connection;
 
     }
-    //            Stream.generate(() -> new PojoMessage(randomName(), randomCount(),
-//                            randomDate()))
-//                    .limit(maxN).takeWhile(p -> stopWatch.taken()<Long.parseLong(STOP_TIME)*THOUSAND)
-//                    .forEach(msg -> {
-//                        producer.send(Services.toJson(msg));
-//                        COUNTER_SEND_MESS.getAndIncrement();
-//                        // logger.info("№ "+COUNTER_SEND_MESS+ "  " + msg+ "  ");
-//                    });
+
     public void createProductStream() {
         int batchSize = Integer.parseInt(BATH_SIZE);
         int numberOfProducts = Integer.parseInt(NUMBER_PRODUCTS);

@@ -1,15 +1,15 @@
-DROP DATABASE IF EXISTS bdrom ;
-DROP SCHEMA IF EXISTS bdrom CASCADE;
+DROP DATABASE IF EXISTS rom1;
+DROP SCHEMA IF EXISTS rom1 CASCADE;
 DROP TABLE IF EXISTS store CASCADE;
 DROP TABLE IF EXISTS type CASCADE;
-DROP TABLE  IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS finish CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS inventory CASCADE;
 
 
 CREATE
-    DATABASE bdrom;
+    DATABASE rom1;
 CREATE
-    SCHEMA bdrom;
+    SCHEMA rom1;
 
 CREATE TABLE store
 (
@@ -26,7 +26,6 @@ CREATE TABLE type
     id   SERIAL PRIMARY KEY,
     type VARCHAR(255)
 );
-
 CREATE TABLE products
 (
     id      SERIAL PRIMARY KEY,
@@ -37,13 +36,13 @@ CREATE TABLE products
     FOREIGN KEY (type_id) REFERENCES type (id)
 
 );
-CREATE TABLE finish
+
+CREATE TABLE inventory
 (
-    id        SERIAL PRIMARY KEY,
+    id         SERIAL PRIMARY KEY,
     store_id   INT,
     product_id INT,
     qty        INT,
     FOREIGN KEY (store_id) REFERENCES store (id),
     FOREIGN KEY (product_id) REFERENCES products (id)
-
 );

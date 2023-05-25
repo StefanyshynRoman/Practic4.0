@@ -27,124 +27,73 @@ public class ProductGenerator implements Constant {
         this.connection = connection;
 
     }
-    //            Stream.generate(() -> new PojoMessage(randomName(), randomCount(),
-//                            randomDate()))
-//                    .limit(maxN).takeWhile(p -> stopWatch.taken()<Long.parseLong(STOP_TIME)*THOUSAND)
-//                    .forEach(msg -> {
-//                        producer.send(Services.toJson(msg));
-//                        COUNTER_SEND_MESS.getAndIncrement();
-//                        // logger.info("№ "+COUNTER_SEND_MESS+ "  " + msg+ "  ");
-//                    });
-//    public void createProductStream() {
-//        int batchSize = Integer.parseInt(BATH_SIZE);
-//        int numberOfProducts = Integer.parseInt(NUMBER_PRODUCTS);
-//
-//        try {
-//            String insertQuery = "INSERT INTO products (type_id,name) VALUES (?, ?)";
-//            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-//
-//            StopWatch stopWatch = new StopWatch();
-//            stopWatch.restart();
-//
-//            Stream.generate(() -> {
-//                        try {
-//                            return new Product(generateType(), generateRandomProductName());
-//                        } catch (SQLException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    })
-//                    .limit(numberOfProducts)
-//                    .forEach(product -> {
-//                        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-//
-//                        if (violations.isEmpty()) {
-//                            try {
-//                                preparedStatement.setInt(1, product.getProductTypeId());
-//                                preparedStatement.setString(2, product.getProductName());
-//                                preparedStatement.addBatch();
-//
-//                                if (counter.incrementAndGet() % batchSize == 0) {
-//                                    preparedStatement.executeBatch();
-//                                    preparedStatement.clearBatch();
-//                                }
-//                            } catch (SQLException e) {
-//                                e.printStackTrace();
-//                            }
-//                        } else {
-//                            counter.getAndIncrement();
-//                        }
-//                    });
-//
-//            preparedStatement.executeBatch();
-//            stopWatch.stop();
-//
-//            logger.info("Generation products: {}", numberOfProducts);
-//            logger.info("Generation products is over: seconds - {}", stopWatch.taken() / THOUSAND);
-//            logger.warn("RPS - {}, Batch size - {}", 1000.0 * numberOfProducts / stopWatch.taken(), BATH_SIZE);
-//            logger.warn("Product invalid: {}", counter);
-//
-//            preparedStatement.close();
-//        } catch (SQLException e) {
-//            logger.error("Product generator error: {}", e.getMessage());
-//        }
-//    }
-    public void createProductStream() {
+public void createProductStream() {
+    int batchSize = Integer.parseInt(BATH_SIZE);
+    int numberOfProducts = Integer.parseInt(NUMBER_PRODUCTS);
 
-        int batchSize = Integer.parseInt(BATH_SIZE);
-        int numberOfProducts = Integer.parseInt(NUMBER_PRODUCTS);
-        try {
-            String insertQuery = "INSERT INTO products (type_id,name) VALUES (?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.restart();
+    try {
+        String insertQuery = "INSERT INTO products (type_id,name) VALUES (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
 
-            IntStream.rangeClosed(1, numberOfProducts)
-                    .forEach(i -> {
-                        int productType = 1;
-                        try {
-                            productType = generateType();
-                        } catch (SQLException e) {
-                            logger.error("Generate type { }", e);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.restart();
 
-                        }
-                        String productName = generateRandomProductName();
-                        Product product = new Product(productType, productName);
-                        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-                        if (violations.isEmpty()) {
-                            try {
-                                preparedStatement.setInt(1, productType);
-                                preparedStatement.setString(2, productName);
-                                preparedStatement.addBatch();
+        int generatedProducts = 0;
+        int validProducts = 0;
 
-                                if (i % batchSize == 0) {
-                                    preparedStatement.executeBatch();
-                                    preparedStatement.clearBatch();
-                                }
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            counter.getAndIncrement();
-                        }
-                    });
+        while (validProducts < numberOfProducts) {
+            Product product;
+            try {
+                product = new Product(generateType(), generateRandomProductName());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
-            preparedStatement.executeBatch();
-            stopWatch.stop();
-            logger.info("Generation products :{} ", numberOfProducts);
-            logger.info("Generation products is over: second - {} ", (stopWatch.taken()) / THOUSAND);
+            Set<ConstraintViolation<Product>> violations = validator.validate(product);
 
-            preparedStatement.close();
-            logger.warn("RPS - {}, Bach size - {}", 1000.0 * numberOfProducts / stopWatch.taken(),BATH_SIZE);
+            if (violations.isEmpty()) {
+                try {
+                    preparedStatement.setInt(1, product.getProductTypeId());
+                    preparedStatement.setString(2, product.getProductName());
+                    preparedStatement.addBatch();
 
-            logger.warn("Product invalid  {} ", counter);
-        } catch (SQLException e) {
-            logger.error("Product generator {} ", e.getMessage());
+                    if (generatedProducts % batchSize == 0) {
+                        preparedStatement.executeBatch();
+                        preparedStatement.clearBatch();
+                    }
 
+                    validProducts++;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            generatedProducts++;
         }
 
+        preparedStatement.executeBatch();
+        stopWatch.stop();
+        logger.info("Generation products: {}", numberOfProducts);
+        logger.info("Generation products is over: seconds - {}", stopWatch.taken() / THOUSAND);
+        logger.warn("RPS - {}, Batch size - {}", 1000.0 * numberOfProducts / stopWatch.taken(), BATH_SIZE);
+        logger.warn("All product: {}, Product invalid: {} ", generatedProducts, generatedProducts - validProducts);
+
+        preparedStatement.close();
+    } catch (SQLException e) {
+        logger.error("Product generator error: {}", e.getMessage());
     }
+}
 
-
+public int getRowCountFromProduct() throws SQLException {
+    String countQuery = "SELECT COUNT(*) AS row_count FROM products";
+    try (Statement statement = connection.createStatement()) {
+        ResultSet resultSet = statement.executeQuery(countQuery);
+        if (resultSet.next()) {
+            return resultSet.getInt("row_count");
+        }
+    }
+    return 0;
+}
     public int getRowCountFromType() throws SQLException {
         String countQuery = "SELECT COUNT(*) AS row_count FROM type";
         try (Statement statement = connection.createStatement()) {
