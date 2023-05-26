@@ -10,55 +10,76 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class ProductFind implements Constant{
+public class ProductFind implements Constant {
     private final Logger logger = LoggerFactory.getLogger(ProductFind.class);
     Connection connection;
 
-    public ProductFind(Connection connection)  {
+    public ProductFind(Connection connection) {
         this.connection = connection;
 
     }
+
     public void find() {
-        StopWatch stopWatch=new StopWatch();
+        StopWatch stopWatch = new StopWatch();
         stopWatch.restart();
 
-           String productType = System.getProperty("type","test").toLowerCase();
-            String sql =  "SELECT s.address " +
-                    "FROM store s " +
-                    "JOIN inventory f ON s.id = f.store_id " +
-                    "JOIN products p ON f.product_id = p.id " +
-                    "JOIN type t ON p.type_id = t.id " +
-                    "WHERE t.type = ? " +
-                    "GROUP BY s.id " +
-                    "ORDER BY SUM(f.qty) DESC " +
-                    "LIMIT 1";
-//        SELECT s.address
-//        FROM store s
-//        INNER JOIN inventory f ON s.id = f.store_id
-//        INNER JOIN products p ON f.product_id = p.id
-//        INNER JOIN type t ON p.type_id = t.id
-//        WHERE t.type = ?
-//        GROUP BY s.address
-//        ORDER BY SUM(f.qty) DESC
-//        LIMIT 1;
+        String productType = System.getProperty("type", "test").toLowerCase();
+//        String sql = "SELECT store.address, sum(qty) as sum_of_quantity\n" +
+//                "FROM inventory\n" +
+//                "INNER JOIN products  on inventory.product_id = products.id,\n" +
+//                "store,\n" +
+//                "type\n" +
+//                "where type.id=products.type_id\n" +
+//                "and type.type=?\n" +
+//                "and store.id=inventory.store_id\n" +
+//                "group by store.address\n" +
+//                "order by sum_of_quantity desc\n" +
+//                "limit 1";
+        String sql= "   SELECT store.address, SUM(qty) AS sum_of_quantity" +
+                " FROM inventory" +
+                " INNER JOIN products ON inventory.product_id = products.id" +
+                "       JOIN store ON store.id = inventory.store_id" +
+                "        JOIN type ON type.id = products.type_id" +
+                "      WHERE type.type = ?" +
+                "     GROUP BY store.address" +
+                "        ORDER BY sum_of_quantity DESC" +
+                "   LIMIT 1";
+//        String sql = "SELECT store_id, Sum(qty) as suma"+
+//                " from inventory i "+
+//                " join products p on p.id = i.product_id "+
+//                " where p.type_id = ? "+
+//                " group by store_id "+
+//                " order by suma desc  "+
+//                " limit  1 ";
 
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, productType);
-                ResultSet resultSet = statement.executeQuery();
+
+//        String sql = "SELECT type, address, sum(qty) as sum_of_quantity" +
+//                "        FROM products p, type t, store s, inventory i" +
+//                "        WHERE p.type_id = t.id" +
+//                " and s.id=i.store_id" +
+//                "        and i.product_id=p.id" +
+//                "        and t.type = ?" +
+//                "        GROUP BY t.type, s.address" +
+//                "      ORDER BY sum_of_quantity desc" +
+//                "        LIMIT 1";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, productType);
+            ResultSet resultSet = statement.executeQuery();
 
 
-                if (resultSet.next()) {
-                    String storeAddress = resultSet.getString("address");
-                    logger.warn("Store's address  with " + productType + ": " + storeAddress);
+            if (resultSet.next()) {
+                String storeAddress = resultSet.getString("address");
+                logger.warn("Store's address  with " + productType + ": " + storeAddress);
 
-                } else {
-                    logger.warn("Store's not found with type : " + productType );
-                }
+            } else {
+                logger.warn("Store's not found with type : " + productType);
+            }
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }  stopWatch.stop();
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        stopWatch.stop();
 
 
     }

@@ -35,6 +35,7 @@ CREATE TABLE products
     name    VARCHAR(255),
     FOREIGN KEY (type_id) REFERENCES type (id)
 
+
 );
 
 CREATE TABLE inventory
@@ -45,4 +46,10 @@ CREATE TABLE inventory
     qty        INT,
     FOREIGN KEY (store_id) REFERENCES store (id),
     FOREIGN KEY (product_id) REFERENCES products (id)
+
 );
+CREATE INDEX idx1 ON products (type_id);
+CREATE INDEX idx10 ON inventory (product_id);
+CREATE INDEX idx2 ON inventory (store_id);
+CREATE INDEX idx3 ON products (id);
+CREATE INDEX idx4 ON type (id);
