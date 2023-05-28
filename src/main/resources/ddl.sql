@@ -51,6 +51,7 @@ CREATE TABLE inventory
 
 CREATE INDEX idx1 ON products (name);
 CREATE INDEX idx11 ON products (id);
+CREATE INDEX idx111 ON products (type_id);
 CREATE INDEX idx2 ON inventory (product_id);
 CREATE INDEX idx22 ON inventory (store_id);
 CREATE INDEX idx222 ON inventory (qty);

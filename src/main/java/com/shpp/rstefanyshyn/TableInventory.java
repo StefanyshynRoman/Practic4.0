@@ -32,10 +32,10 @@ public class TableInventory implements Constant {
             PreparedStatement selectProductsStatement = connection.prepareStatement(selectProductQuery);
             selectStoresStatement.execute();
             selectProductsStatement.execute();
+
             int rowCountProduct = getRowCountFromProduct();
             int rowCountStore = getRowCountFromStore();
             int rowInventory = rowCountProduct * rowCountStore;
-
             StopWatch stopWatch = new StopWatch();
             stopWatch.restart();
             IntStream.range(1, (rowCountProduct * rowCountStore + 1)).forEach(x -> {

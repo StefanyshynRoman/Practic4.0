@@ -35,34 +35,35 @@ public class ProductFind implements Constant {
 //                "group by store.address\n" +
 //                "order by sum_of_quantity desc\n" +
 //                "limit 1";
-        String sql= "   SELECT store.address, SUM(qty) AS sum_of_quantity" +
-                " FROM inventory" +
-                " INNER JOIN products ON inventory.product_id = products.id" +
-                "       JOIN store ON store.id = inventory.store_id" +
-                "        JOIN type ON type.id = products.type_id" +
-                "      WHERE type.type = ?" +
-                "     GROUP BY store.address" +
-                "        ORDER BY sum_of_quantity DESC" +
-                "   LIMIT 1";
+//        String sql= "   SELECT store.address, SUM(qty) AS sum_of_quantity" +
+//                " FROM inventory" +
+//                " INNER JOIN products ON inventory.product_id = products.id" +
+//                "       JOIN store ON store.id = inventory.store_id" +
+//                "        JOIN type ON type.id = products.type_id" +
+//                "      WHERE type.type = ?" +
+//                "     GROUP BY store.address" +
+//                "        ORDER BY sum_of_quantity DESC" +
+//                "   LIMIT 1";
 
-//        String sql = "SELECT store_id, Sum(qty) as suma"+
-//                " from inventory i "+
-//                " join products p on p.id = i.product_id "+
-//                " where p.type_id = ? "+
-//                " group by store_id "+
-//                " order by suma desc  "+
-//                " limit  1 ";
+//        String sql = "SELECT s.address, SUM(i.qty) AS total_quantity " +
+//                           "FROM inventory i " +
+//                           "INNER JOIN products p ON i.product_id = p.id " +
+//                           "INNER JOIN store s ON i.store_id = s.id " +
+//                           "INNER JOIN type t ON p.type_id = t.id " +
+//                           "WHERE t.type = ? " +
+//                           "GROUP BY s.address " +
+//                           "ORDER BY total_quantity DESC " +
+//                           "LIMIT 1";
 
-
-//        String sql = "SELECT type, address, sum(qty) as sum_of_quantity" +
-//                "        FROM products p, type t, store s, inventory i" +
-//                "        WHERE p.type_id = t.id" +
-//                " and s.id=i.store_id" +
-//                "        and i.product_id=p.id" +
-//                "        and t.type = ?" +
-//                "        GROUP BY t.type, s.address" +
-//                "      ORDER BY sum_of_quantity desc" +
-//                "        LIMIT 1";
+        String sql = "SELECT type, address, sum(qty) as sum_of_quantity" +
+                "        FROM products p, type t, store s, inventory i" +
+                "        WHERE p.type_id = t.id" +
+                " and s.id=i.store_id" +
+                "        and i.product_id=p.id" +
+                "        and t.type = ?" +
+                "        GROUP BY t.type, s.address" +
+                "      ORDER BY sum_of_quantity desc" +
+                "        LIMIT 1";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, productType);

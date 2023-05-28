@@ -96,9 +96,11 @@ CREATE INDEX idx2 ON inventory (store_id);
     }
 
     private static void generateInventoryTable() throws SQLException {
-        TableInventory tableInventory = new TableInventory(bdConnection.getConnection());
+       TableInventory tableInventory = new TableInventory(bdConnection.getConnection());
+        // TebleInventoryManyStreams tableInventory = new TebleInventoryManyStreams(bdConnection.getConnection());
         logger.warn("store_address: {} , products: {}, type_products: {}",
                 tableInventory.getRowCountFromStore(), tableInventory.getRowCountFromProduct(), productGenerator.getRowCountFromType());
+      //  tableInventory.generateFinishTable();
         tableInventory.generateFinishTable();
 
 
