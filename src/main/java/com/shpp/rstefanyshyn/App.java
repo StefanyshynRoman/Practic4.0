@@ -59,6 +59,10 @@ WARN  c.s.r.TableFinish Create table inventory for second 140.891 , Row in ... t
 WARN  c.s.r.ProductFind Store's address  with test: "kamianets-podilskyi, vyacheslava chornovola street, 59"
 INFO  c.s.rstefanyshyn.App Find  products type , seconds 3.997
 INFO  c.s.r.BDConnection Disconnected from the database.
+CREATE INDEX idx1 ON products (type_id);
+CREATE INDEX idx10 ON inventory (product_id);
+CREATE INDEX idx2 ON inventory (store_id);
+
  */
 
     static BDConnection bdConnection = new BDConnection();

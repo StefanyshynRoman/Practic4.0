@@ -44,6 +44,7 @@ public class ProductFind implements Constant {
                 "     GROUP BY store.address" +
                 "        ORDER BY sum_of_quantity DESC" +
                 "   LIMIT 1";
+
 //        String sql = "SELECT store_id, Sum(qty) as suma"+
 //                " from inventory i "+
 //                " join products p on p.id = i.product_id "+

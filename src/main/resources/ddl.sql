@@ -48,8 +48,15 @@ CREATE TABLE inventory
     FOREIGN KEY (product_id) REFERENCES products (id)
 
 );
-CREATE INDEX idx1 ON products (type_id);
-CREATE INDEX idx10 ON inventory (product_id);
-CREATE INDEX idx2 ON inventory (store_id);
-CREATE INDEX idx3 ON products (id);
-CREATE INDEX idx4 ON type (id);
+
+CREATE INDEX idx1 ON products (name);
+CREATE INDEX idx11 ON products (id);
+CREATE INDEX idx2 ON inventory (product_id);
+CREATE INDEX idx22 ON inventory (store_id);
+CREATE INDEX idx222 ON inventory (qty);
+CREATE INDEX idx3 ON type (id);
+CREATE INDEX idx33 ON type (type);
+CREATE INDEX idx4 ON store (id);
+CREATE INDEX idx44 ON store (address);
+
+
