@@ -12,8 +12,6 @@ import java.sql.*;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ProductGenerator implements Constant {
     private static final Logger logger = LoggerFactory.getLogger(ProductGenerator.class);
@@ -28,7 +26,7 @@ public class ProductGenerator implements Constant {
 
     }
 public void createProductStream() {
-    int batchSize = Integer.parseInt(BATH_SIZE);
+    int batchSize = Integer.parseInt(BATCH_SIZE);
     int numberOfProducts = Integer.parseInt(NUMBER_PRODUCTS);
 
     try {
@@ -75,7 +73,7 @@ public void createProductStream() {
         stopWatch.stop();
         logger.info("Generation products: {}", numberOfProducts);
         logger.info("Generation products is over: seconds - {}", stopWatch.taken() / THOUSAND);
-        logger.warn("RPS - {}, Batch size - {}", 1000.0 * numberOfProducts / stopWatch.taken(), BATH_SIZE);
+        logger.warn("RPS - {}, Batch size - {}", 1000.0 * numberOfProducts / stopWatch.taken(), BATCH_SIZE);
         logger.warn("All product: {}, Product invalid: {} ", generatedProducts, generatedProducts - validProducts);
 
         preparedStatement.close();

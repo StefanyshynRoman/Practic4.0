@@ -14,6 +14,7 @@ public class BDConnection implements Constant {
     public boolean connect() throws SQLException {
         connection = DriverManager.getConnection(
                 URL_SQL,USER,PASSWORD    );
+        connection.setAutoCommit(true);
         connection.createStatement();
         logger.info("Connected to the database.");
         return true;

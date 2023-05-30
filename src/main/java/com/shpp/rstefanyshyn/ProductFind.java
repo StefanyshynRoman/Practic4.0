@@ -24,36 +24,6 @@ public class ProductFind implements Constant {
         stopWatch.restart();
 
         String productType = System.getProperty("type", "test").toLowerCase();
-//        String sql = "SELECT store.address, sum(qty) as sum_of_quantity\n" +
-//                "FROM inventory\n" +
-//                "INNER JOIN products  on inventory.product_id = products.id,\n" +
-//                "store,\n" +
-//                "type\n" +
-//                "where type.id=products.type_id\n" +
-//                "and type.type=?\n" +
-//                "and store.id=inventory.store_id\n" +
-//                "group by store.address\n" +
-//                "order by sum_of_quantity desc\n" +
-//                "limit 1";
-//        String sql= "   SELECT store.address, SUM(qty) AS sum_of_quantity" +
-//                " FROM inventory" +
-//                " INNER JOIN products ON inventory.product_id = products.id" +
-//                "       JOIN store ON store.id = inventory.store_id" +
-//                "        JOIN type ON type.id = products.type_id" +
-//                "      WHERE type.type = ?" +
-//                "     GROUP BY store.address" +
-//                "        ORDER BY sum_of_quantity DESC" +
-//                "   LIMIT 1";
-
-//        String sql = "SELECT s.address, SUM(i.qty) AS total_quantity " +
-//                           "FROM inventory i " +
-//                           "INNER JOIN products p ON i.product_id = p.id " +
-//                           "INNER JOIN store s ON i.store_id = s.id " +
-//                           "INNER JOIN type t ON p.type_id = t.id " +
-//                           "WHERE t.type = ? " +
-//                           "GROUP BY s.address " +
-//                           "ORDER BY total_quantity DESC " +
-//                           "LIMIT 1";
 
         String sql = "SELECT type, address, sum(qty) as sum_of_quantity" +
                 "        FROM products p, type t, store s, inventory i" +

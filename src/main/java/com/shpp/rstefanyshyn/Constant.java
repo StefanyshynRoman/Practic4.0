@@ -14,7 +14,7 @@ public interface Constant {
     String USER=PROPERTY_CONNECTION.getValueFromProperty("username.db");
     String PASSWORD=PROPERTY_CONNECTION.getValueFromProperty("password.db");
 
-    String BATH_SIZE =PROPERTY.getValueFromProperty("bath_size") ;
+    String BATCH_SIZE =PROPERTY.getValueFromProperty("bath_size") ;
 
     double THOUSAND =1000;
 
